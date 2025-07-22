@@ -11,4 +11,14 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        host: 'project-login.test',
+        port: 5173,
+        cors: true,
+        hmr: {
+            host: 'project-login.test',
+        },
+    },
 });
+
+
