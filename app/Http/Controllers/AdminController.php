@@ -5,26 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class AdminController extends Controller
 {
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function index()
-    {
-        return view('dashboard');
-    }
-
-    public function manageUser()
-    {
-        return view('dashboard.manage');
-    }
-
     public function create()
     {
-        return view('dashboard.form');
+        return view('admin.form');
     }
 
     public function store(Request $request)
@@ -44,7 +29,7 @@ class DashboardController extends Controller
 
     public function edit(User $user)
     {
-        return view('dashboard.form', compact('user'));
+        return view('admin.form', compact('user'));
     } 
 
     public function update(Request $request, User $user)

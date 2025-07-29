@@ -32,12 +32,14 @@ class ManageUsers extends Component
     public function render()
     {
         $users = User::query()
-        ->when($this->search, function ($query) {
-            $query->where('name', 'like', '%'.$this->search.'%')
-                  ->orWhere('email', 'like', '%'.$this->search.'%');
-        })
         ->where('role', '!=', 'admin') // Exclude admin users
-        ->orderBy('id', 'asc')
+        ->when($this->search, function ($query) {
+            $query->where(function($q) {
+                $q->where('name', 'like', '%'.$this->search.'%')
+                    ->orWhere('email', 'like', '%'.$this->search.'%');
+            });
+        })
+        ->orderBy('name', 'asc')
         ->paginate(10);
 
         return view('livewire.manage-users', [

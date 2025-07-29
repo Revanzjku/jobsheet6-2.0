@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +22,9 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
     // Dashboard route
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -29,8 +32,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Manage users routes (Admin only)
-    Route::get('/manage-users', [DashboardController::class, 'manageUser'])->name('manage.users')->middleware('role:admin');
-    Route::resource('users', DashboardController::class)->except('show', 'index')->middleware('role:admin');
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/dashboard/manage-users', function () {
+            return view('admin.manage');
+        })->name('manage.users');
+
+        Route::resource('users', AdminController::class)->except('show', 'index', 'destroy');
+    });
 });
 
 require __DIR__.'/auth.php';
